@@ -16,6 +16,8 @@ class Bird(Image):
         self.y += self.velocity
         if self.y < 0:
             self.y = 0
+        elif self.top > Window.height:
+            self.top = Window.height
 
 class GameScreen(Widget):
     def __init__(self, **kwargs):
@@ -26,6 +28,8 @@ class GameScreen(Widget):
         self._keyboard.bind(on_key_down=self._on_key_down)
         self._keyboard.bind(on_key_up=self._on_key_up)
 
+        self.pressed_keys = set()
+
         self.bird = Bird()
         self.add_widget(self.bird)
         Clock.schedule_interval(self.update, 1/165)
@@ -35,14 +39,20 @@ class GameScreen(Widget):
         self._keyboard.unbind(on_key_up=self._on_key_up)
         self._keyboard = None
 
+    def _on_key_down(self, keyboard, keycode, text, verified):
+        self.pressed_keys.add(keycode[1])
+            
+    def _on_key_up(self, keyboard, keycode):
+        if keycode[1] in self.pressed_keys:
+            self.pressed_keys.remove(keycode[1])
+        self.bird.velocity = -5
+
+
     def update(self, dt):
         self.bird.move(dt)
-
-    def _on_key_down(self, keyboard, keycode, text):
-        self.pressed_keys.add(text)
-
-    def _on_key_up(self, keyboard, keycode):
-        self.bird.velocity = -5
+        step = 1000 * dt
+        if 'w' in self.pressed_keys:
+            self.bird.velocity = 10
 
 class BirdGameApp(App):
     def build(self):
