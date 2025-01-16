@@ -5,9 +5,10 @@ from kivy.properties import NumericProperty
 from kivy.clock import Clock
 from kivy.lang import Builder
 from kivy.core.window import Window
+from PIL import Image as PILImage # Import Image class from PIL module
 
 Builder.load_file('bird.kv')
-
+Builder.load_file('obstacle.kv')
 
 class Bird(Image):
     velocity = NumericProperty(0)
@@ -18,6 +19,13 @@ class Bird(Image):
             self.y = 0
         elif self.top > Window.height:
             self.top = Window.height
+
+class Obstacle_1(Image):
+    def move(self, dt):
+        self.x -= 200 * dt
+        if self.right < 0:
+            self.x = Window.width
+
 
 class GameScreen(Widget):
     def __init__(self, **kwargs):
@@ -32,6 +40,10 @@ class GameScreen(Widget):
 
         self.bird = Bird()
         self.add_widget(self.bird)
+
+        self.obstacle_1 = Obstacle_1(pos=(Window.width, 200))
+        self.add_widget(self.obstacle_1)
+
         Clock.schedule_interval(self.update, 1/165)
     
     def _on_keyboard_closed(self):
@@ -50,9 +62,16 @@ class GameScreen(Widget):
 
     def update(self, dt):
         self.bird.move(dt)
+        self.obstacle_1.move(dt)
         step = 1000 * dt
         if 'w' in self.pressed_keys:
             self.bird.velocity = 10
+
+        if self.bird.collide_widget(self.obstacle_1):
+            print("Game Over!")
+            self.bird.velocity = 0
+            Clock.unschedule(self.update)
+
 
 class BirdGameApp(App):
     def build(self):
