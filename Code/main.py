@@ -6,6 +6,7 @@ from kivy.clock import Clock
 from kivy.lang import Builder
 from kivy.core.window import Window
 from PIL import Image as PILImage # Import Image class from PIL module
+import random
 
 Builder.load_file('bird.kv')
 Builder.load_file('obstacle.kv')
@@ -82,46 +83,77 @@ class GameScreen(Widget):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        self._keyboard = Window.request_keyboard(
-                self._on_keyboard_closed, self)
+        self._keyboard = Window.request_keyboard(self._on_keyboard_closed, self)
         self._keyboard.bind(on_key_down=self._on_key_down)
         self._keyboard.bind(on_key_up=self._on_key_up)
 
         self.pressed_keys = set()
 
+        # ตัวละคร Bird
         self.bird = Bird()
         self.add_widget(self.bird)
 
-        self.obstacle_1 = Obstacle_1(pos=(Window.width, 200))
-        self.add_widget(self.obstacle_1)
+        # เก็บรายการอุปสรรคทั้งหมด
+        self.obstacles = []
 
-        Clock.schedule_interval(self.update, 1/165)
-    
+        # เริ่มต้นอัปเดตเกม
+        Clock.schedule_interval(self.update, 1 / 60)
+
+        # สุ่มอุปสรรคทุกๆ ช่วงเวลา
+        self.spawn_obstacles()
+
+    def spawn_obstacles(self, *args):
+        # สุ่มจำนวนอุปสรรคใหม่ในรอบนี้ (เช่น 1 ถึง 2 อัน)
+        num_obstacles = random.randint(1, 2)
+
+        for _ in range(num_obstacles):
+            obstacle = Obstacle_1()
+
+            max_y = Window.height - obstacle.height  # ขอบบนสุดที่อุปสรรคอยู่ได้
+            y_position = random.randint(0, max_y)  # สุ่ม y ในช่วงที่ไม่หลุดจอ
+
+            obstacle = Obstacle_1(pos=(Window.width, y_position))
+            self.add_widget(obstacle)
+            self.obstacles.append(obstacle)
+
+        # สุ่มเวลาสำหรับการเกิดอุปสรรคใหม่
+        next_spawn_time = random.uniform(1, 5)  # สุ่มเวลา 1 ถึง 2 วินาที
+        Clock.schedule_once(self.spawn_obstacles, next_spawn_time)
+
     def _on_keyboard_closed(self):
         self._keyboard.unbind(on_key_down=self._on_key_down)
         self._keyboard.unbind(on_key_up=self._on_key_up)
         self._keyboard = None
 
-    def _on_key_down(self, keyboard, keycode, text, verified):
+    def _on_key_down(self, keyboard, keycode, text, modifiers):
         self.pressed_keys.add(keycode[1])
-            
+
     def _on_key_up(self, keyboard, keycode):
         if keycode[1] in self.pressed_keys:
             self.pressed_keys.remove(keycode[1])
         self.bird.velocity = -5
 
-
     def update(self, dt):
         self.bird.move(dt)
-        self.obstacle_1.move(dt)
-        step = 1000 * dt
+
+        # อัปเดตการเคลื่อนที่ของอุปสรรคทั้งหมด
+        for obstacle in self.obstacles[:]:
+            obstacle.move(dt)
+
+            # ตรวจสอบการชน
+            if self.bird.check_collision(obstacle):
+                print("Game Over!")
+                Clock.unschedule(self.update)
+                return
+
+            # ลบอุปสรรคที่ออกนอกหน้าจอ
+            if obstacle.right < 0:
+                self.remove_widget(obstacle)
+                self.obstacles.remove(obstacle)
+
+        # ตรวจสอบการกดปุ่ม
         if 'w' in self.pressed_keys:
             self.bird.velocity = 10
-
-        if self.bird.check_collision(self.obstacle_1):
-            print("Game Over!")
-            self.bird.velocity = 0
-            Clock.unschedule(self.update)
 
 
 class BirdGameApp(App):
