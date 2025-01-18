@@ -7,9 +7,15 @@ from kivy.lang import Builder
 from kivy.core.window import Window
 from PIL import Image as PILImage # Import Image class from PIL module
 import random
+from kivy.uix.button import Button
+from kivy.uix.label import Label
+from kivy.uix.boxlayout import BoxLayout
 
 Builder.load_file('bird.kv')
 Builder.load_file('obstacle.kv')
+
+class mainmenu(BoxLayout):
+    pass
 
 class Bird(Image):
     velocity = NumericProperty(0)
@@ -135,31 +141,35 @@ class GameScreen(Widget):
 
     def update(self, dt):
         self.bird.move(dt)
+        if 'w' in self.pressed_keys:
+            self.bird.velocity = 10
 
-        # อัปเดตการเคลื่อนที่ของอุปสรรคทั้งหมด
         for obstacle in self.obstacles[:]:
             obstacle.move(dt)
 
-            # ตรวจสอบการชน
             if self.bird.check_collision(obstacle):
                 print("Game Over!")
                 Clock.unschedule(self.update)
                 return
 
-            # ลบอุปสรรคที่ออกนอกหน้าจอ
             if obstacle.right < 0:
                 self.remove_widget(obstacle)
                 self.obstacles.remove(obstacle)
-
-        # ตรวจสอบการกดปุ่ม
-        if 'w' in self.pressed_keys:
-            self.bird.velocity = 10
-
 
 class BirdGameApp(App):
     def build(self):
         return GameScreen()
 
+
+class mainmenuApp(App):
+    def build(self):
+        return mainmenu()
+    
+    def openbirdgame(self):
+        self.stop()
+        BirdGameApp().run()
+    
+
 if __name__ == '__main__':
-    BirdGameApp().run()
+    mainmenuApp().run()
     
