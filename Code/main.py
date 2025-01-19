@@ -162,6 +162,7 @@ class GameScreen(Widget):
             if self.bird.check_collision(obstacle):
                 print("Game Over!")
                 Clock.unschedule(self.update)
+                self.sound.stop()
                 return
 
             if obstacle.right < 0:
