@@ -10,12 +10,21 @@ import random
 from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.boxlayout import BoxLayout
+from kivy.core.audio import SoundLoader
 
 Builder.load_file('bird.kv')
 Builder.load_file('obstacle.kv')
 
 class mainmenu(BoxLayout):
-    pass
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+        self.sound = SoundLoader.load('.\img\HSROpen.mp3')
+        self.sound.play()
+
+    def stop_music(self):
+        if self.sound:
+            self.sound.stop()
 
 class Bird(Image):
     velocity = NumericProperty(0)
@@ -88,6 +97,9 @@ class Obstacle_1(Image):
 class GameScreen(Widget):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+
+        self.sound = SoundLoader.load('.\img\Sway to My Beat in Cosmos.mp3')
+        self.sound.play()
 
         self._keyboard = Window.request_keyboard(self._on_keyboard_closed, self)
         self._keyboard.bind(on_key_down=self._on_key_down)
@@ -166,6 +178,9 @@ class mainmenuApp(App):
         return mainmenu()
     
     def openbirdgame(self):
+        root_widget = self.root
+        if root_widget and hasattr(root_widget, 'stop_music'):
+            root_widget.stop_music()
         self.stop()
         BirdGameApp().run()
     
