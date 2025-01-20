@@ -15,14 +15,14 @@ from kivy.core.audio import SoundLoader
 Builder.load_file('bird.kv')
 Builder.load_file('obstacle.kv')
 
-class mainmenu(BoxLayout):
+class mainmenu(BoxLayout): # ใช้ widget ในไฟล์ mainmenu.kv (เนื่องจากชื่อ class เดียวกัน)
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        self.sound = SoundLoader.load('.\img\HSROpen.mp3')
-        self.sound.play()
+        self.sound = SoundLoader.load('.\img\HSROpen.mp3') # โหลดไฟล์เสียง
+        self.sound.play() # เล่นเพลง
 
-    def stop_music(self):
+    def stop_music(self): # หยุดเล่นเสียง
         if self.sound:
             self.sound.stop()
 
@@ -159,10 +159,10 @@ class GameScreen(Widget):
         for obstacle in self.obstacles[:]:
             obstacle.move(dt)
 
-            if self.bird.check_collision(obstacle):
+            if self.bird.check_collision(obstacle): # ตรวจสอบการชนกัน
                 print("Game Over!")
-                Clock.unschedule(self.update)
-                self.sound.stop()
+                Clock.unschedule(self.update) # หยุดอัปเดตเกม
+                self.sound.stop() 
                 return
 
             if obstacle.right < 0:
@@ -180,9 +180,9 @@ class mainmenuApp(App):
     
     def openbirdgame(self):
         root_widget = self.root
-        if root_widget and hasattr(root_widget, 'stop_music'):
+        if root_widget and hasattr(root_widget, 'stop_music'): # ตรวจสอบว่า root_widget มีฟังก์ชัน stop_music หรือไม่
             root_widget.stop_music()
-        self.stop()
+        self.stop() # หยุด App ปัจจุบัน (mainmenuApp)
         BirdGameApp().run()
     
 
