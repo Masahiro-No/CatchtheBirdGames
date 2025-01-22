@@ -1,11 +1,24 @@
 <mainmenu>:
     FloatLayout:
+        canvas.before:
+            Rectangle:
+                source: ".\img\Realfirstback.jpg"
+                size: self.size
+                pos: self.pos
+
+        Image:
+            source: ".\img\game element\gamelogo.png"  # รูปภาพอื่น (เช่นโลโก้)
+            size_hint: 0.4, 0.4  # ขนาดโลโก้
+            pos_hint: {"center_x": 0.5, "center_y": 0.7}  # ตำแหน่งโลโก้
+
+
         Button:
             id: Start_Button
             text: "Start Game"
             font_name : '.\img\game element\CARDOT-Semibold.otf'
+            font_size: self.height*0.06
             size_hint: 0.3, 0.5
-            pos_hint: {"center_x": 0.5, "y": 0.3}
+            pos_hint: {"center_x": 0.5, "y": 0.1}
             background_normal: ".\img\game element\startbutton.png"  # รูปพื้นหลังเมื่อปกติ
             background_down: "background_down.png"  # รูปพื้นหลังเมื่อถูกกด
             color: (0.1647, 0.2392, 0.4, 1)
