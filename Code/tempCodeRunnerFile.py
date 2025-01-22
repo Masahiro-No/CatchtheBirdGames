@@ -1,1 +1,1 @@
-from kivy.clock import Clock
+หยุดเล่นเสียง

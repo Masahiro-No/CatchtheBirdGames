@@ -1,6 +1,12 @@
 <mainmenu>:
-    Button:
-        text: "Click Me!"
-        size_hint: 0.3, 0.2
-        pos_hint: {"center_x": 0.5, "center_y": 0.5}
-        on_press: app.openbirdgame()
+    FloatLayout:
+        Button:
+            id: Start_Button
+            text: "Start Game"
+            font_name : '.\img\game element\CARDOT-Semibold.otf'
+            size_hint: 0.3, 0.5
+            pos_hint: {"center_x": 0.5, "y": 0.3}
+            background_normal: ".\img\game element\startbutton.png"  # รูปพื้นหลังเมื่อปกติ
+            background_down: "background_down.png"  # รูปพื้นหลังเมื่อถูกกด
+            color: (0.1647, 0.2392, 0.4, 1)
+            on_press: app.openbirdgame()

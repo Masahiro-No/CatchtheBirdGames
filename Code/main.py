@@ -19,7 +19,7 @@ class mainmenu(BoxLayout): # ใช้ widget ในไฟล์ mainmenu.kv (�
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        self.sound = SoundLoader.load('.\img\HSROpen.mp3') # โหลดไฟล์เสียง
+        self.sound = SoundLoader.load('.\img\MusicforGame\HSROpen.mp3') # โหลดไฟล์เสียง
         self.sound.play() # เล่นเพลง
 
     def stop_music(self): # หยุดเล่นเสียง
@@ -98,7 +98,7 @@ class GameScreen(Widget):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        self.sound = SoundLoader.load('.\img\Sway to My Beat in Cosmos.mp3')
+        self.sound = SoundLoader.load('.\img\MusicforGame\Sway to My Beat in Cosmos.mp3')
         self.sound.play()
 
         self._keyboard = Window.request_keyboard(self._on_keyboard_closed, self)
