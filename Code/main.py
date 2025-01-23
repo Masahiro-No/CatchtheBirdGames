@@ -11,6 +11,7 @@ from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.boxlayout import BoxLayout
 from kivy.core.audio import SoundLoader
+from kivy.properties import ObjectProperty
 
 Builder.load_file('bird.kv')
 Builder.load_file('obstacle.kv')
@@ -26,12 +27,20 @@ class mainmenu(BoxLayout): # ใช้ widget ในไฟล์ mainmenu.kv (�
         if self.sound:
             self.sound.stop()
 
+
 class Bird(Image):
-    velocity = NumericProperty(0)
-    
+    velocity = NumericProperty(0)  # ความเร็วในการเคลื่อนที่
+    mask = None  # เก็บ Mask ของภาพ
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.mask = self.create_mask(self.source)  # สร้าง Mask จากภาพ Bird
+
+    def on_kv_post(self, base_widget):
+        """
+        ฟังก์ชันนี้จะถูกเรียกหลังจาก Kivy โหลด widget เสร็จ
+        """
+        if self.source:  # ตรวจสอบว่า self.source ได้รับการกำหนดค่าแล้ว
+            self.mask = self.create_mask(self.source)  # สร้าง Mask จากภาพ Bird
 
     def move(self, dt):
         self.y += self.velocity
@@ -95,8 +104,12 @@ class Obstacle_1(Image):
 
 
 class GameScreen(Widget):
-    def __init__(self, **kwargs):
+    bird_mina = ObjectProperty(None)
+    bird_sw = ObjectProperty(None)
+    active_bird = None
+    def __init__(self, bird_id="bird_mina", **kwargs):
         super().__init__(**kwargs)
+        self.select_bird(bird_id)  # เลือกนกที่ต้องการใช้งาน
 
         self.sound = SoundLoader.load('.\img\MusicforGame\Sway to My Beat in Cosmos.mp3')
         self.sound.play()
@@ -107,9 +120,6 @@ class GameScreen(Widget):
 
         self.pressed_keys = set()
 
-        # ตัวละคร Bird
-        self.bird = Bird()
-        self.add_widget(self.bird)
 
         # เก็บรายการอุปสรรคทั้งหมด
         self.obstacles = []
@@ -119,6 +129,17 @@ class GameScreen(Widget):
 
         # สุ่มอุปสรรคทุกๆ ช่วงเวลา
         self.spawn_obstacles()
+
+    def select_bird(self, bird_id):
+        """เลือกนกที่ใช้งาน และลบนกที่ไม่ได้ใช้ออก"""
+        # อ้างอิง bird จาก id
+        self.active_bird = self.ids[bird_id]
+        
+        # ลบนกอื่นๆ ที่ไม่ได้เลือกออกจากหน้าจอ
+        for child_id, bird_widget in self.ids.items():
+            if child_id != bird_id and isinstance(bird_widget, Bird):
+                self.remove_widget(bird_widget)
+
 
     def spawn_obstacles(self, *args):
         # สุ่มจำนวนอุปสรรคใหม่ในรอบนี้ (เช่น 1 ถึง 2 อัน)
@@ -149,17 +170,18 @@ class GameScreen(Widget):
     def _on_key_up(self, keyboard, keycode):
         if keycode[1] in self.pressed_keys:
             self.pressed_keys.remove(keycode[1])
-        self.bird.velocity = -5
+        self.active_bird.velocity = -5
 
     def update(self, dt):
-        self.bird.move(dt)
+        if self.active_bird:
+            self.active_bird.move(dt)
         if 'w' in self.pressed_keys:
-            self.bird.velocity = 10
+            self.active_bird.velocity = 10
 
         for obstacle in self.obstacles[:]:
             obstacle.move(dt)
 
-            if self.bird.check_collision(obstacle): # ตรวจสอบการชนกัน
+            if self.active_bird.check_collision(obstacle): # ตรวจสอบการชนกัน
                 print("Game Over!")
                 Clock.unschedule(self.update) # หยุดอัปเดตเกม
                 self.sound.stop() 
@@ -171,13 +193,13 @@ class GameScreen(Widget):
 
 class BirdGameApp(App):
     def build(self):
-        return GameScreen()
+        return GameScreen(bird_id="bird_mina")
 
 
 class mainmenuApp(App):
     def build(self):
         return mainmenu()
-    
+
     def openbirdgame(self):
         root_widget = self.root
         if root_widget and hasattr(root_widget, 'stop_music'): # ตรวจสอบว่า root_widget มีฟังก์ชัน stop_music หรือไม่
