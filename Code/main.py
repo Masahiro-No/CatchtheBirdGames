@@ -237,6 +237,11 @@ class SkinMenuApp(App):
         bird_game_app = BirdGameApp(bird_id="bird_himeko")
         bird_game_app.run()
 
+    def robin_skin(self):
+        self.stop()
+        bird_game_app = BirdGameApp(bird_id="bird_robin")
+        bird_game_app.run()
+
 
 class mainmenuApp(App):
     def build(self):
