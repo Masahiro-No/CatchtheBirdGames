@@ -76,11 +76,30 @@
                 color: (0.1647, 0.2392, 0.4, 1)
                 on_press: app.stelle_skin()
 
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint: 0.2, 0.5
+            pos_hint: {"center_x": 0.5, "center_y": 0.25}  # ด้านล่างกลาง
+            Image:
+                source: "./img/character_skin/Himekouse.png"
+                size_hint: 1, 1
+            Button:
+                id: select_himeko
+                text: "Himeko Bird"
+                font_name: '.\img\game element\CARDOT-Semibold.otf'
+                font_size: self.height * 0.13
+                size_hint: 1, 0.6
+                background_normal: ".\img\game element\startbutton.png"
+                color: (0.1647, 0.2392, 0.4, 1)
+
+
+
 <GameScreen>:
     bird_mina: bird_mina
     bird_sw: bird_sw
     bird_danheng: bird_danheng
     bird_stelle: bird_stelle
+    bird_himeko: bird_himeko
 
     Bird:
         id: bird_mina
@@ -97,3 +116,7 @@
     Bird:
         id: bird_stelle
         source: './img/character_skin/Stelleuse.png'  # รูปภาพตัวละคร
+
+    Bird:
+        id: bird_himeko
+        source: './img/character_skin/Himekouse.png'  # รูปภาพตัวละคร
