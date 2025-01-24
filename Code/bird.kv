@@ -58,6 +58,23 @@
                 color: (0.1647, 0.2392, 0.4, 1)
                 on_press: app.danheng_skin()
 
+        # กลุ่มปุ่มด้านล่าง
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint: 0.2, 0.5
+            pos_hint: {"x": 0.05, "center_y": 0.25}  # ด้านซ้ายล่าง
+            Image:
+                source: "./img/character_skin/Stelleuse.png"
+                size_hint: 1, 1
+            Button:
+                id: select_stelle
+                text: "Stelle Bird"
+                font_name: '.\img\game element\CARDOT-Semibold.otf'
+                font_size: self.height * 0.13
+                size_hint: 1, 0.6
+                background_normal: ".\img\game element\startbutton.png"
+                color: (0.1647, 0.2392, 0.4, 1)
+
 
 <GameScreen>:
     bird_mina: bird_mina
