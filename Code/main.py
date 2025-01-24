@@ -210,9 +210,13 @@ class SkinMenuApp(App):
     
     def mina_skin(self):
         self.stop()  # หยุด SkinMenuApp
-        bird_game_app = BirdGameApp(bird_id="bird_sw")  # สร้าง BirdGameApp ด้วย bird_id="bird_mina"
+        bird_game_app = BirdGameApp(bird_id="bird_mina")  # สร้าง BirdGameApp ด้วย bird_id="bird_mina"
         bird_game_app.run()  # รัน BirdGameApp
 
+    def sw_skin(self):
+        self.stop()
+        bird_game_app = BirdGameApp(bird_id="bird_sw")
+        bird_game_app.run()
 
 class mainmenuApp(App):
     def build(self):

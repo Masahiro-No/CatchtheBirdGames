@@ -15,6 +15,17 @@
         color: (0.1647, 0.2392, 0.4, 1)
         on_press: app.mina_skin()
 
+    Button:
+        id: select_mina
+        text: "Silver Wolf Bird"
+        font_name : '.\img\game element\CARDOT-Semibold.otf'
+        font_size: self.height*0.06
+        size_hint: 0.3, 0.5
+        pos_hint: {"center_x": 0.5, "y": 0.1}
+        background_normal: ".\img\game element\startbutton.png"  # รูปพื้นหลังเมื่อปกติ
+        color: (0.1647, 0.2392, 0.4, 1)
+        on_press: app.sw_skin()
+
 
 
 <GameScreen>:
