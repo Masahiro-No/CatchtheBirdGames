@@ -74,12 +74,13 @@
                 size_hint: 1, 0.6
                 background_normal: ".\img\game element\startbutton.png"
                 color: (0.1647, 0.2392, 0.4, 1)
-
+                on_press: app.stelle_skin()
 
 <GameScreen>:
     bird_mina: bird_mina
     bird_sw: bird_sw
     bird_danheng: bird_danheng
+    bird_stelle: bird_stelle
 
     Bird:
         id: bird_mina
@@ -92,3 +93,7 @@
     Bird:
         id: bird_danheng
         source: './img/character_skin/DanhengBirduse.png'  # รูปภาพตัวละคร
+
+    Bird:
+        id: bird_stelle
+        source: './img/character_skin/Stelleuse.png'  # รูปภาพตัวละคร

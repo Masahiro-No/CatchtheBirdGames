@@ -111,7 +111,9 @@ class GameScreen(Widget):
     bird_mina = ObjectProperty(None)
     bird_sw = ObjectProperty(None)
     bird_danheng = ObjectProperty(None)
+    bird_stelle = ObjectProperty(None)
     active_bird = None
+
     def __init__(self, bird_id="bird_mina", **kwargs):
         super().__init__(**kwargs)
         self.select_bird(bird_id)  # เลือกนกที่ต้องการใช้งาน
@@ -222,6 +224,11 @@ class SkinMenuApp(App):
     def danheng_skin(self):
         self.stop()
         bird_game_app = BirdGameApp(bird_id="bird_danheng")
+        bird_game_app.run()
+
+    def stelle_skin(self):
+        self.stop()
+        bird_game_app = BirdGameApp(bird_id="bird_stelle")
         bird_game_app.run()
 
 class mainmenuApp(App):
