@@ -93,12 +93,30 @@
                 color: (0.1647, 0.2392, 0.4, 1)
                 on_press: app.himeko_skin()
 
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint: 0.2, 0.5
+            pos_hint: {"x": 0.75, "center_y": 0.25}  # ด้านขวาล่าง
+            Image:
+                source: "./img/character_skin/Robinuse.png"
+                size_hint: 1, 1
+            Button:
+                id: select_robin
+                text: "Robin Bird"
+                font_name: '.\img\game element\CARDOT-Semibold.otf'
+                font_size: self.height * 0.13
+                size_hint: 1, 0.6
+                background_normal: ".\img\game element\startbutton.png"
+                color: (0.1647, 0.2392, 0.4, 1)
+
+
 <GameScreen>:
     bird_mina: bird_mina
     bird_sw: bird_sw
     bird_danheng: bird_danheng
     bird_stelle: bird_stelle
     bird_himeko: bird_himeko
+    bird_robin: bird_robin
 
     Bird:
         id: bird_mina
@@ -119,3 +137,7 @@
     Bird:
         id: bird_himeko
         source: './img/character_skin/Himekouse.png'  # รูปภาพตัวละคร
+
+    Bird:
+        id: bird_robin
+        source: './img/character_skin/Robinuse.png'  # รูปภาพตัวละคร
