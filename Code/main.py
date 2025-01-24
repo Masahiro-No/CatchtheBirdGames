@@ -27,6 +27,10 @@ class mainmenu(BoxLayout): # ใช้ widget ในไฟล์ mainmenu.kv (�
         if self.sound:
             self.sound.stop()
 
+class skinmenu(BoxLayout): # ใช้ widget ในไฟล์ skinmenu.kv (เนื่องจากชื่อ class เดียวกัน)
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        
 
 class Bird(Image):
     velocity = NumericProperty(0)  # ความเร็วในการเคลื่อนที่
@@ -192,8 +196,22 @@ class GameScreen(Widget):
                 self.obstacles.remove(obstacle)
 
 class BirdGameApp(App):
+    def __init__(self, bird_id="bird_sw", **kwargs):
+        super().__init__(**kwargs)
+        self.bird_id = bird_id
+
     def build(self):
-        return GameScreen(bird_id="bird_mina")
+        return GameScreen(bird_id=self.bird_id)
+    
+
+class SkinMenuApp(App):
+    def build(self):
+        return skinmenu()
+    
+    def mina_skin(self):
+        self.stop()  # หยุด SkinMenuApp
+        bird_game_app = BirdGameApp(bird_id="bird_sw")  # สร้าง BirdGameApp ด้วย bird_id="bird_mina"
+        bird_game_app.run()  # รัน BirdGameApp
 
 
 class mainmenuApp(App):
@@ -205,7 +223,7 @@ class mainmenuApp(App):
         if root_widget and hasattr(root_widget, 'stop_music'): # ตรวจสอบว่า root_widget มีฟังก์ชัน stop_music หรือไม่
             root_widget.stop_music()
         self.stop() # หยุด App ปัจจุบัน (mainmenuApp)
-        BirdGameApp().run()
+        SkinMenuApp().run()
     
 
 if __name__ == '__main__':
