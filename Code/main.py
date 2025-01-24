@@ -110,6 +110,7 @@ class Obstacle_1(Image):
 class GameScreen(Widget):
     bird_mina = ObjectProperty(None)
     bird_sw = ObjectProperty(None)
+    bird_danheng = ObjectProperty(None)
     active_bird = None
     def __init__(self, bird_id="bird_mina", **kwargs):
         super().__init__(**kwargs)
@@ -196,7 +197,7 @@ class GameScreen(Widget):
                 self.obstacles.remove(obstacle)
 
 class BirdGameApp(App):
-    def __init__(self, bird_id="bird_sw", **kwargs):
+    def __init__(self, bird_id="bird_mina", **kwargs):
         super().__init__(**kwargs)
         self.bird_id = bird_id
 
@@ -216,6 +217,11 @@ class SkinMenuApp(App):
     def sw_skin(self):
         self.stop()
         bird_game_app = BirdGameApp(bird_id="bird_sw")
+        bird_game_app.run()
+
+    def danheng_skin(self):
+        self.stop()
+        bird_game_app = BirdGameApp(bird_id="bird_danheng")
         bird_game_app.run()
 
 class mainmenuApp(App):
