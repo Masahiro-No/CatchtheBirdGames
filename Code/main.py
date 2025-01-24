@@ -112,6 +112,7 @@ class GameScreen(Widget):
     bird_sw = ObjectProperty(None)
     bird_danheng = ObjectProperty(None)
     bird_stelle = ObjectProperty(None)
+    bird_himeko = ObjectProperty(None)
     active_bird = None
 
     def __init__(self, bird_id="bird_mina", **kwargs):
@@ -230,6 +231,12 @@ class SkinMenuApp(App):
         self.stop()
         bird_game_app = BirdGameApp(bird_id="bird_stelle")
         bird_game_app.run()
+
+    def himeko_skin(self):
+        self.stop()
+        bird_game_app = BirdGameApp(bird_id="bird_himeko")
+        bird_game_app.run()
+
 
 class mainmenuApp(App):
     def build(self):
