@@ -139,6 +139,7 @@
             id: game_over_label
             text: "GAME OVER"
             font_size: '50sp'
+            font_name: '.\img\game element\CARDOT-Semibold.otf'
             color: 1, 0, 0, 1  # สีแดง
             bold: True
             size_hint: None, None
@@ -146,20 +147,30 @@
             opacity: 0  # ซ่อน Label โดยตั้งค่า opacity เป็น 0
 
         Button:
+            id: restart_button
+            text: "Restart"
+            font_size: '20sp'
+            font_name: '.\img\game element\CARDOT-Semibold.otf'
+            size_hint: None, None
+            size: 200, 50
+            opacity: 0  # ซ่อนปุ่มจนกว่าเกมจะจบ
+
+
+        Button: #เห็นตอนเปิดหน้าจอเต็มเท่านั้น
             id: Stop Music
             size_hint: None, None
             size: 100, 100
             pos_hint: {"center_x": 17.5, "y": 9}
             background_normal: ".\img\game element\stopmusicicon.png"
-            on_press: root.stop_music()  # เรียกฟังก์ชัน stop_music จาก mainmenu
+            on_press: root.stop_music()  # เรียกฟังก์ชัน stop_music จาก GameScreen
 
-        Button:
+        Button: #เห็นตอนเปิดหน้าจอเต็มเท่านั้น
             id: Play Music
             size_hint: None, None
             size: 95, 95
             pos_hint: {"center_x": 18.5, "y": 9.025}
             background_normal: ".\img\game element\playmusicicon.png"
-            on_press: root.play_music()  # เรียกฟังก์ชัน play_music จาก mainmenu
+            on_press: root.play_music()  # เรียกฟังก์ชัน play_music จาก GameScreen
 
     Bird:
         id: bird_mina
