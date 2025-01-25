@@ -229,12 +229,21 @@ class GameScreen(Widget):
             if self.active_bird.check_collision(obstacle): # ตรวจสอบการชนกัน
                 print("Game Over!")
                 Clock.unschedule(self.update) # หยุดอัปเดตเกม
+                self.show_game_over()  # เรียกฟังก์ชันแสดง "Game Over"
                 self.sound.stop() 
                 return
 
             if obstacle.right < 0:
                 self.remove_widget(obstacle)
                 self.obstacles.remove(obstacle)
+            
+    def show_game_over(self):
+        # ค้นหา Label ด้วย id
+        game_over_label = self.ids.game_over_label
+        game_over_label.pos = (Window.width / 2 - game_over_label.width / 2, Window.height / 2 - game_over_label.height / 2)  # กำหนดตำแหน่งของ Label
+        # เปลี่ยน opacity เพื่อแสดงข้อความ
+        game_over_label.opacity = 1  # แสดงข้อความ GAME OVER
+
 
 class BirdGameApp(App):
     def __init__(self, bird_id="bird_mina", **kwargs):

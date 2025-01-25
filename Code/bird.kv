@@ -134,6 +134,17 @@
                 size: root.width, root.height  # ครอบคลุมหน้าจอทั้งหมด
                 pos: 0, 0  # เริ่มที่มุมซ้ายล่าง
 
+        # เพิ่ม Label สำหรับ Game Over
+        Label:
+            id: game_over_label
+            text: "GAME OVER"
+            font_size: '50sp'
+            color: 1, 0, 0, 1  # สีแดง
+            bold: True
+            size_hint: None, None
+            size: 300, 100
+            opacity: 0  # ซ่อน Label โดยตั้งค่า opacity เป็น 0
+
         Button:
             id: Stop Music
             size_hint: None, None
