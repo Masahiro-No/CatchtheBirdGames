@@ -2,7 +2,7 @@
     FloatLayout:
         canvas.before:
             Rectangle:
-                source: ".\img\Realfirstback.jpg"
+                source: ".\img\mainback.jpg"
                 size: self.size
                 pos: self.pos
 
@@ -22,3 +22,12 @@
             background_normal: ".\img\game element\startbutton.png"  # รูปพื้นหลังเมื่อปกติ
             color: (0.1647, 0.2392, 0.4, 1)
             on_press: app.openbirdgame()
+
+        Label:
+            text: "Press to select skins"
+            font_name: '.\img\game element\CARDOT-Semibold.otf'
+            font_size: '20sp'
+            size_hint: None, None
+            size: self.texture_size
+            pos_hint: {"center_x": 0.5, "y": 0.25}  # อยู่ต่ำกว่าปุ่มเล็กน้อย
+            color: (1, 1, 1, 1)  # สีข้อความ (สีขาว)
