@@ -248,6 +248,11 @@ class GameScreen(Widget):
         restart_button.pos = (Window.width / 2 - restart_button.width / 2, Window.height / 2 - restart_button.height / 2 - 100)  # กำหนดตำแหน่งของปุ่ม Restart
         restart_button.opacity = 1  # แสดงปุ่ม Restart
 
+    def restart_game(self):
+        # ปิดแอปพลิเคชันปัจจุบัน
+        App.get_running_app().stop()
+        SkinMenuApp().run()  # เรียกใช้งานแอปใหม่
+
 
 class BirdGameApp(App):
     def __init__(self, bird_id="bird_mina", **kwargs):
