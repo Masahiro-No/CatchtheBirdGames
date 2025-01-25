@@ -243,16 +243,26 @@ class GameScreen(Widget):
         game_over_label.pos = (Window.width / 2 - game_over_label.width / 2, Window.height / 2 - game_over_label.height / 2)  # กำหนดตำแหน่งของ Label
         # เปลี่ยน opacity เพื่อแสดงข้อความ
         game_over_label.opacity = 1  # แสดงข้อความ GAME OVER
+
         # ค้นหาปุ่ม Restart ด้วย id และแสดงมัน
         restart_button = self.ids.restart_button
         restart_button.pos = (Window.width / 2 - restart_button.width / 2, Window.height / 2 - restart_button.height / 2 - 100)  # กำหนดตำแหน่งของปุ่ม Restart
         restart_button.opacity = 1  # แสดงปุ่ม Restart
 
+        # ค้นหาปุ่ม Close ด้วย id และแสดงมัน
+        close_button = self.ids.close_button
+        close_button.pos = (Window.width / 2 - close_button.width / 2, Window.height / 2 - close_button.height / 2 - 200)  # กำหนดตำแหน่งของปุ่ม Close
+        close_button.opacity = 1  # แสดงปุ่ม Close
+
     def restart_game(self):
         # ปิดแอปพลิเคชันปัจจุบัน
+        print('Restarting game...')
         App.get_running_app().stop()
         SkinMenuApp().run()  # เรียกใช้งานแอปใหม่
 
+    def close_game(self):
+        print('Thank you for playing!')
+        App.get_running_app().stop()  # ปิดแอปพลิเคชันปัจจุบัน
 
 class BirdGameApp(App):
     def __init__(self, bird_id="bird_mina", **kwargs):
