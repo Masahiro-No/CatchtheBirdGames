@@ -5,6 +5,13 @@
 
 <skinmenu> :
     FloatLayout:  # ใช้ FloatLayout สำหรับควบคุมการจัดตำแหน่งทั้งหมด
+        canvas.before:
+            Color:
+                rgba: 1, 1, 1, 1  # สีพื้นหลังเป็นสีขาว (เพื่อความชัดเจน)
+            Rectangle:
+                source: "./img/skinback.jpg"  # รูปภาพพื้นหลัง
+                size: root.width, root.height  # ครอบคลุมหน้าจอทั้งหมด
+                pos: 0, 0  # เริ่มที่มุมซ้ายล่าง
 
         # กลุ่มปุ่มด้านบน
         BoxLayout:
@@ -117,6 +124,15 @@
     bird_stelle: bird_stelle
     bird_himeko: bird_himeko
     bird_robin: bird_robin
+
+    FloatLayout:
+        canvas.before:
+            Color:
+                rgba: 1, 1, 1, 1  # สีพื้นหลังเป็นสีขาว (เพื่อความชัดเจน)
+            Rectangle:
+                source: "./img/gameback.jpg"  # รูปภาพพื้นหลัง
+                size: root.width, root.height  # ครอบคลุมหน้าจอทั้งหมด
+                pos: 0, 0  # เริ่มที่มุมซ้ายล่าง
 
     Bird:
         id: bird_mina

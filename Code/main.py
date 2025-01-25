@@ -136,8 +136,14 @@ class GameScreen(Widget):
         super().__init__(**kwargs)
         self.select_bird(bird_id)  # เลือกนกที่ต้องการใช้งาน
 
-        self.sound = SoundLoader.load('.\img\MusicforGame\Sway to My Beat in Cosmos.mp3')
-        self.sound.play()
+        # ตรวจสอบ path ของไฟล์เพลง
+        sound_path = os.path.join('.', 'img', 'MusicforGame', 'Sway to My Beat in Cosmos.mp3')
+        self.sound = SoundLoader.load(sound_path)  # โหลดไฟล์เสียง
+
+        if self.sound:  # ตรวจสอบว่าการโหลดสำเร็จหรือไม่
+            self.sound.play()
+        else:
+            print("Failed to load sound:", sound_path)
 
         self._keyboard = Window.request_keyboard(self._on_keyboard_closed, self)
         self._keyboard.bind(on_key_down=self._on_key_down)
