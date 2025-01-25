@@ -12,6 +12,7 @@ from kivy.uix.label import Label
 from kivy.uix.boxlayout import BoxLayout
 from kivy.core.audio import SoundLoader
 from kivy.properties import ObjectProperty
+import os
 
 Builder.load_file('bird.kv')
 Builder.load_file('obstacle.kv')
@@ -20,12 +21,28 @@ class mainmenu(BoxLayout): # ใช้ widget ในไฟล์ mainmenu.kv (�
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        self.sound = SoundLoader.load('.\img\MusicforGame\HSROpen.mp3') # โหลดไฟล์เสียง
-        self.sound.play() # เล่นเพลง
+        # ตรวจสอบ path ของไฟล์เพลง
+        sound_path = os.path.join('.', 'img', 'MusicforGame', 'HSROpen.mp3')
+        self.sound = SoundLoader.load(sound_path)  # โหลดไฟล์เสียง
 
-    def stop_music(self): # หยุดเล่นเสียง
-        if self.sound:
+        if self.sound:  # ตรวจสอบว่าการโหลดสำเร็จหรือไม่
+            self.sound.play()
+        else:
+            print("Failed to load sound:", sound_path)
+
+    def stop_music(self):  # หยุดเล่นเสียง
+        if self.sound:  # ตรวจสอบว่ามีไฟล์เสียงที่โหลดอยู่หรือไม่
             self.sound.stop()
+
+    def play_music(self):  # เล่นเพลงอีกครั้ง
+        if not self.sound:  # หาก self.sound เป็น None ให้โหลดเสียงใหม่
+            sound_path = os.path.join('.', 'img', 'MusicforGame', 'HSROpen.mp3')
+            self.sound = SoundLoader.load(sound_path)
+            if not self.sound:  # หากยังโหลดไม่ได้
+                print("Failed to load sound:", sound_path)
+                return
+
+        self.sound.play()  # เล่นเพลง
 
 class skinmenu(BoxLayout): # ใช้ widget ในไฟล์ skinmenu.kv (เนื่องจากชื่อ class เดียวกัน)
     def __init__(self, **kwargs):
