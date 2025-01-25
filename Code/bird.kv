@@ -134,6 +134,22 @@
                 size: root.width, root.height  # ครอบคลุมหน้าจอทั้งหมด
                 pos: 0, 0  # เริ่มที่มุมซ้ายล่าง
 
+        Button:
+            id: Stop Music
+            size_hint: None, None
+            size: 100, 100
+            pos_hint: {"center_x": 17.5, "y": 9}
+            background_normal: ".\img\game element\stopmusicicon.png"
+            on_press: root.stop_music()  # เรียกฟังก์ชัน stop_music จาก mainmenu
+
+        Button:
+            id: Play Music
+            size_hint: None, None
+            size: 95, 95
+            pos_hint: {"center_x": 18.5, "y": 9.025}
+            background_normal: ".\img\game element\playmusicicon.png"
+            on_press: root.play_music()  # เรียกฟังก์ชัน play_music จาก mainmenu
+
     Bird:
         id: bird_mina
         source: './img/character_skin/MinaBirduse.png'  # รูปภาพตัวละคร

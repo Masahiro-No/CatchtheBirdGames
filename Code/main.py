@@ -161,6 +161,20 @@ class GameScreen(Widget):
         # สุ่มอุปสรรคทุกๆ ช่วงเวลา
         self.spawn_obstacles()
 
+    def stop_music(self):  # หยุดเล่นเสียง
+        if self.sound:  # ตรวจสอบว่ามีไฟล์เสียงที่โหลดอยู่หรือไม่
+            self.sound.stop()
+
+    def play_music(self):  # เล่นเพลงอีกครั้ง
+        if not self.sound:  # หาก self.sound เป็น None ให้โหลดเสียงใหม่
+            sound_path = os.path.join('.', 'img', 'MusicforGame', 'HSROpen.mp3')
+            self.sound = SoundLoader.load(sound_path)
+            if not self.sound:  # หากยังโหลดไม่ได้
+                print("Failed to load sound:", sound_path)
+                return
+
+        self.sound.play()  # เล่นเพลง
+
     def select_bird(self, bird_id):
         """เลือกนกที่ใช้งาน และลบนกที่ไม่ได้ใช้ออก"""
         # อ้างอิง bird จาก id
