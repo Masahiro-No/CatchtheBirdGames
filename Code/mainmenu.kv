@@ -31,3 +31,10 @@
             size: self.texture_size
             pos_hint: {"center_x": 0.5, "y": 0.25}  # อยู่ต่ำกว่าปุ่มเล็กน้อย
             color: (1, 1, 1, 1)  # สีข้อความ (สีขาว)
+
+        Button:
+            id: Stop Music
+            size_hint: None, None
+            pos_hint: {"center_x": 0.5, "y": 0.01}
+            background_normal: ".\img\game element\stopmusicicon.png"
+            on_press: root.stop_music()  # เรียกฟังก์ชัน play_music จาก mainmenu
