@@ -131,6 +131,7 @@ class GameScreen(Widget):
     bird_stelle = ObjectProperty(None)
     bird_himeko = ObjectProperty(None)
     active_bird = None
+    is_game_over = False  # ตัวแปรบอกสถานะเกม (เกมจบหรือยัง)
 
     def __init__(self, bird_id="bird_mina", **kwargs):
         super().__init__(**kwargs)
@@ -217,6 +218,26 @@ class GameScreen(Widget):
             self.pressed_keys.remove(keycode[1])
         self.active_bird.velocity = -5
 
+    def on_touch_down(self, touch):
+        # เช็คก่อนว่าเกมจบหรือยัง
+        if self.is_game_over:
+            return super().on_touch_down(touch)  # ถ้าเกมจบแล้ว ให้ทำงานปกติของ Kivy
+
+        # เช็คก่อนว่า touch ถูกส่งไปที่ widget อื่น เช่น ปุ่ม
+        for widget in self.children:  # ตรวจสอบทุก widget บนหน้าจอ
+            if widget.collide_point(touch.x, touch.y):  # ถ้า touch อยู่ในพื้นที่ของ widget
+                if isinstance(widget, Button):  # ถ้า widget นั้นคือปุ่ม
+                    return super().on_touch_down(touch)  # ให้ทำงานของปุ่มก่อน แล้วหยุดตรงนี้
+
+        # ถ้าไม่ได้กดปุ่ม ให้เช็คว่าแตะอุปสรรคไหน
+        for obstacle in self.obstacles[:]:  # วนลูปเช็คอุปสรรคทั้งหมด
+            if obstacle.collide_point(touch.x, touch.y):  # ตรวจสอบว่าจุดสัมผัสอยู่ในพื้นที่ของอุปสรรค
+                self.remove_widget(obstacle)  # ลบอุปสรรคออกจากหน้าจอ
+                self.obstacles.remove(obstacle)  # ลบอุปสรรคออกจากลิสต์
+                break  # หยุดการเช็คหลังจากลบอุปสรรคที่สัมผัสแล้ว
+
+        return super().on_touch_down(touch)  # ทำงานของ Kivy ต่อไป (ถ้าไม่เจออะไร)
+
     def update(self, dt):
         if self.active_bird:
             self.active_bird.move(dt)
@@ -238,6 +259,7 @@ class GameScreen(Widget):
                 self.obstacles.remove(obstacle)
             
     def show_game_over(self):
+        self.is_game_over = True  # ตั้งค่า flag ว่าเกมจบแล้ว
         # ค้นหา Label ด้วย id
         game_over_label = self.ids.game_over_label
         game_over_label.pos = (Window.width / 2 - game_over_label.width / 2, Window.height / 2 - game_over_label.height / 2)  # กำหนดตำแหน่งของ Label
