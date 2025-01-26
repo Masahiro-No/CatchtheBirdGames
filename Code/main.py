@@ -14,8 +14,8 @@ from kivy.core.audio import SoundLoader
 from kivy.properties import ObjectProperty
 import os
 
-Builder.load_file('bird.kv')
-Builder.load_file('obstacle.kv')
+Builder.load_file('bird.kv') # โหลดไฟล์ bird.kv
+Builder.load_file('obstacle.kv') # โหลดไฟล์ obstacle.kv
 
 class mainmenu(BoxLayout): # ใช้ widget ในไฟล์ mainmenu.kv (เนื่องจากชื่อ class เดียวกัน)
     def __init__(self, **kwargs):
@@ -63,12 +63,12 @@ class Bird(Image):
         if self.source:  # ตรวจสอบว่า self.source ได้รับการกำหนดค่าแล้ว
             self.mask = self.create_mask(self.source)  # สร้าง Mask จากภาพ Bird
 
-    def move(self, dt):
+    def move(self, dt): # ฟังก์ชันเคลื่อนที่ของ Bird
         self.y += self.velocity
         if self.y < 0:
-            self.y = 0
+            self.y = 0 # หยุดการเคลื่อนที่เมื่อชนขอบล่าง
         elif self.top > Window.height:
-            self.top = Window.height
+            self.top = Window.height # หยุดการเคลื่อนที่เมื่อชนขอบบน
 
     def create_mask(self, image_path):
         pil_image = PILImage.open(image_path).convert('L')  # เปลี่ยนเป็น grayscale
@@ -89,48 +89,48 @@ class Bird(Image):
         # คำนวณพิกเซลใน Mask
         for x in range(int(x_overlap)):
             for y in range(int(y_overlap)):
-                bird_mask_x = int((x + max(self.x, obstacle.x) - self.x) / self.width * self.mask.size[0])
-                bird_mask_y = int((y + max(self.y, obstacle.y) - self.y) / self.height * self.mask.size[1])
-                obstacle_mask_x = int((x + max(self.x, obstacle.x) - obstacle.x) / obstacle.width * obstacle.mask.size[0])
-                obstacle_mask_y = int((y + max(self.y, obstacle.y) - obstacle.y) / obstacle.height * obstacle.mask.size[1])
+                bird_mask_x = int((x + max(self.x, obstacle.x) - self.x) / self.width * self.mask.size[0]) # คำนวณตำแหน่ง x ใน Mask ของ Bird
+                bird_mask_y = int((y + max(self.y, obstacle.y) - self.y) / self.height * self.mask.size[1]) # คำนวณตำแหน่ง y ใน Mask ของ Bird
+                obstacle_mask_x = int((x + max(self.x, obstacle.x) - obstacle.x) / obstacle.width * obstacle.mask.size[0]) # คำนวณตำแหน่ง x ใน Mask ของ Obstacle
+                obstacle_mask_y = int((y + max(self.y, obstacle.y) - obstacle.y) / obstacle.height * obstacle.mask.size[1]) # คำนวณตำแหน่ง y ใน Mask ของ Obstacle
 
                 if (
                     0 <= bird_mask_x < self.mask.size[0]
                     and 0 <= bird_mask_y < self.mask.size[1]
                     and 0 <= obstacle_mask_x < obstacle.mask.size[0]
-                    and 0 <= obstacle_mask_y < obstacle.mask.size[1]
+                    and 0 <= obstacle_mask_y < obstacle.mask.size[1] # ตรวจสอบว่าตำแหน่งอยู่ในขอบเขตของ Mask
                 ):
                     if (
                         self.mask.getpixel((bird_mask_x, bird_mask_y)) > 0
-                        and obstacle.mask.getpixel((obstacle_mask_x, obstacle_mask_y)) > 0
+                        and obstacle.mask.getpixel((obstacle_mask_x, obstacle_mask_y)) > 0 # ตรวจสอบว่าพิกเซลที่ชนกันมีค่ามากกว่า 0
                     ):
-                        return True
-        return False
+                        return True # ถ้าพิกเซลที่ชนกันมีค่ามากกว่า 0 ให้คืนค่า True
+        return False # ถ้าไม่มีพิกเซลที่ชนกัน ให้คืนค่า False
 
 
 class Obstacle_1(Image):
     def move(self, dt, speed):
         self.x -= speed * dt  # ใช้ค่าความเร็วในการเคลื่อนที่
         if self.right < 0:
-            self.x = Window.width
+            self.x = Window.width # กำหนดตำแหน่งใหม่เมื่ออุปสรรคหลุดจอ
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.mask = self.create_mask(self.source)
+        self.mask = self.create_mask(self.source) # สร้าง Mask จากภาพ Obstacle
 
-    def create_mask(self, image_path):
+    def create_mask(self, image_path): # สร้าง Mask จากภาพ Obstacle
         pil_image = PILImage.open(image_path).convert('L')
         mask = pil_image.point(lambda p: p > 0 and 255)
         return mask
 
 
 class GameScreen(Widget):
-    bird_mina = ObjectProperty(None)
+    bird_mina = ObjectProperty(None) # อ้างอิง Bird จาก id
     bird_sw = ObjectProperty(None)
     bird_danheng = ObjectProperty(None)
     bird_stelle = ObjectProperty(None)
     bird_himeko = ObjectProperty(None)
-    active_bird = None
+    active_bird = None # นกที่ใช้งานอยู่
     is_game_over = False  # ตัวแปรบอกสถานะเกม (เกมจบหรือยัง)
     obstacle_speed = 200  # ความเร็วเริ่มต้นของอุปสรรค
 
@@ -147,11 +147,11 @@ class GameScreen(Widget):
         else:
             print("Failed to load sound:", sound_path)
 
-        self._keyboard = Window.request_keyboard(self._on_keyboard_closed, self)
-        self._keyboard.bind(on_key_down=self._on_key_down)
-        self._keyboard.bind(on_key_up=self._on_key_up)
+        self._keyboard = Window.request_keyboard(self._on_keyboard_closed, self) # ขอ Keyboard จาก Window
+        self._keyboard.bind(on_key_down=self._on_key_down) # ผูกเหตุการณ์กดปุ่มลง
+        self._keyboard.bind(on_key_up=self._on_key_up) # ผูกเหตุการณ์ปล่อยปุ่มขึ้น
 
-        self.pressed_keys = set()
+        self.pressed_keys = set() # เก็บปุ่มที่กดอยู่
 
 
         # เก็บรายการอุปสรรคทั้งหมด
@@ -169,7 +169,6 @@ class GameScreen(Widget):
     def increase_obstacle_speed(self, dt):
         """เพิ่มความเร็วของอุปสรรคทุก 5 วินาที"""
         self.obstacle_speed += 10  # เพิ่มความเร็วขึ้นทุก 5 วินาที
-        print(f"Increasing obstacle speed: {self.obstacle_speed}")
 
     def stop_music(self):  # หยุดเล่นเสียง
         if self.sound:  # ตรวจสอบว่ามีไฟล์เสียงที่โหลดอยู่หรือไม่
@@ -206,9 +205,9 @@ class GameScreen(Widget):
             max_y = Window.height - obstacle.height  # ขอบบนสุดที่อุปสรรคอยู่ได้
             y_position = random.randint(0, max_y)  # สุ่ม y ในช่วงที่ไม่หลุดจอ
 
-            obstacle = Obstacle_1(pos=(Window.width, y_position))
-            self.add_widget(obstacle)
-            self.obstacles.append(obstacle)
+            obstacle = Obstacle_1(pos=(Window.width, y_position)) 
+            self.add_widget(obstacle) # เพิ่มอุปสรรคลงในหน้าจอ
+            self.obstacles.append(obstacle) # เก็บอุปสรรคลงในลิสต์
 
         # สุ่มเวลาสำหรับการเกิดอุปสรรคใหม่
         next_spawn_time = random.uniform(1, 5)  # สุ่มเวลา 1 ถึง 2 วินาที
@@ -220,12 +219,12 @@ class GameScreen(Widget):
         self._keyboard = None
 
     def _on_key_down(self, keyboard, keycode, text, modifiers):
-        self.pressed_keys.add(keycode[1])
+        self.pressed_keys.add(keycode[1]) # เพิ่มปุ่มที่กดลงใน set
 
     def _on_key_up(self, keyboard, keycode):
         if keycode[1] in self.pressed_keys:
-            self.pressed_keys.remove(keycode[1])
-        self.active_bird.velocity = -5
+            self.pressed_keys.remove(keycode[1]) # ลบปุ่มที่ปล่อยออกจาก set
+        self.active_bird.velocity = -5 # กำหนดความเร็วเป็น -5 เมื่อปล่อยปุ่ม
 
     def on_touch_down(self, touch):
         # เช็คก่อนว่าเกมจบหรือยัง
@@ -249,9 +248,9 @@ class GameScreen(Widget):
 
     def update(self, dt):
         if self.active_bird:
-            self.active_bird.move(dt)
+            self.active_bird.move(dt) # เคลื่อนที่ของ Bird
         if 'w' in self.pressed_keys:
-            self.active_bird.velocity = 10
+            self.active_bird.velocity = 10 # กำหนดความเร็วเป็น 10 เมื่อกดปุ่ม w
 
         for obstacle in self.obstacles[:]:
             obstacle.move(dt, self.obstacle_speed)  # ส่งค่าความเร็วของอุปสรรคไปที่การเคลื่อนที่
@@ -264,8 +263,8 @@ class GameScreen(Widget):
                 return
 
             if obstacle.right < 0:
-                self.remove_widget(obstacle)
-                self.obstacles.remove(obstacle)
+                self.remove_widget(obstacle) # ลบอุปสรรคออกจากหน้าจอ
+                self.obstacles.remove(obstacle) # ลบอุปสรรคออกจากลิสต์
             
     def show_game_over(self):
         self.is_game_over = True  # ตั้งค่า flag ว่าเกมจบแล้ว
@@ -298,10 +297,10 @@ class GameScreen(Widget):
 class BirdGameApp(App):
     def __init__(self, bird_id="bird_mina", **kwargs):
         super().__init__(**kwargs)
-        self.bird_id = bird_id
+        self.bird_id = bird_id # กำหนด bird_id ที่จะใช้งาน
 
     def build(self):
-        return GameScreen(bird_id=self.bird_id)
+        return GameScreen(bird_id=self.bird_id) # สร้าง GameScreen ด้วย bird_id ที่กำหนด
     
 
 class SkinMenuApp(App):
@@ -314,41 +313,41 @@ class SkinMenuApp(App):
         bird_game_app.run()  # รัน BirdGameApp
 
     def sw_skin(self):
-        self.stop()
-        bird_game_app = BirdGameApp(bird_id="bird_sw")
-        bird_game_app.run()
+        self.stop() # หยุด SkinMenuApp
+        bird_game_app = BirdGameApp(bird_id="bird_sw") # สร้าง BirdGameApp ด้วย bird_id="bird_sw"
+        bird_game_app.run() # รัน BirdGameApp
 
     def danheng_skin(self):
-        self.stop()
-        bird_game_app = BirdGameApp(bird_id="bird_danheng")
-        bird_game_app.run()
+        self.stop() # หยุด SkinMenuApp
+        bird_game_app = BirdGameApp(bird_id="bird_danheng") # สร้าง BirdGameApp ด้วย bird_id="bird_danheng"
+        bird_game_app.run() # รัน BirdGameApp
 
     def stelle_skin(self):
-        self.stop()
-        bird_game_app = BirdGameApp(bird_id="bird_stelle")
-        bird_game_app.run()
+        self.stop() # หยุด SkinMenuApp
+        bird_game_app = BirdGameApp(bird_id="bird_stelle") # สร้าง BirdGameApp ด้วย bird_id="bird_stelle"
+        bird_game_app.run() # รัน BirdGameApp
 
     def himeko_skin(self):
-        self.stop()
-        bird_game_app = BirdGameApp(bird_id="bird_himeko")
-        bird_game_app.run()
+        self.stop() # หยุด SkinMenuApp
+        bird_game_app = BirdGameApp(bird_id="bird_himeko") # สร้าง BirdGameApp ด้วย bird_id="bird_himeko"
+        bird_game_app.run() # รัน BirdGameApp
 
     def robin_skin(self):
-        self.stop()
-        bird_game_app = BirdGameApp(bird_id="bird_robin")
-        bird_game_app.run()
+        self.stop() # หยุด SkinMenuApp
+        bird_game_app = BirdGameApp(bird_id="bird_robin") # สร้าง BirdGameApp ด้วย bird_id="bird_robin"
+        bird_game_app.run() # รัน BirdGameApp
 
 
 class mainmenuApp(App):
     def build(self):
-        return mainmenu()
+        return mainmenu() # สร้าง mainmenu
 
     def openbirdgame(self):
-        root_widget = self.root
+        root_widget = self.root # อ้างอิง widget หลักของ App
         if root_widget and hasattr(root_widget, 'stop_music'): # ตรวจสอบว่า root_widget มีฟังก์ชัน stop_music หรือไม่
             root_widget.stop_music()
         self.stop() # หยุด App ปัจจุบัน (mainmenuApp)
-        SkinMenuApp().run()
+        SkinMenuApp().run() # เรียกใช้งาน SkinMenuApp
     
 
 if __name__ == '__main__':
