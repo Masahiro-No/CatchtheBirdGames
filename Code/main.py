@@ -109,8 +109,8 @@ class Bird(Image):
 
 
 class Obstacle_1(Image):
-    def move(self, dt):
-        self.x -= 200 * dt
+    def move(self, dt, speed):
+        self.x -= speed * dt  # ใช้ค่าความเร็วในการเคลื่อนที่
         if self.right < 0:
             self.x = Window.width
 
@@ -132,6 +132,7 @@ class GameScreen(Widget):
     bird_himeko = ObjectProperty(None)
     active_bird = None
     is_game_over = False  # ตัวแปรบอกสถานะเกม (เกมจบหรือยัง)
+    obstacle_speed = 200  # ความเร็วเริ่มต้นของอุปสรรค
 
     def __init__(self, bird_id="bird_mina", **kwargs):
         super().__init__(**kwargs)
@@ -161,6 +162,14 @@ class GameScreen(Widget):
 
         # สุ่มอุปสรรคทุกๆ ช่วงเวลา
         self.spawn_obstacles()
+
+        # เริ่มต้นการเพิ่มความเร็วของอุปสรรคทุกๆ 5 วินาที
+        Clock.schedule_interval(self.increase_obstacle_speed, 1)
+
+    def increase_obstacle_speed(self, dt):
+        """เพิ่มความเร็วของอุปสรรคทุก 5 วินาที"""
+        self.obstacle_speed += 10  # เพิ่มความเร็วขึ้นทุก 5 วินาที
+        print(f"Increasing obstacle speed: {self.obstacle_speed}")
 
     def stop_music(self):  # หยุดเล่นเสียง
         if self.sound:  # ตรวจสอบว่ามีไฟล์เสียงที่โหลดอยู่หรือไม่
@@ -245,7 +254,7 @@ class GameScreen(Widget):
             self.active_bird.velocity = 10
 
         for obstacle in self.obstacles[:]:
-            obstacle.move(dt)
+            obstacle.move(dt, self.obstacle_speed)  # ส่งค่าความเร็วของอุปสรรคไปที่การเคลื่อนที่
 
             if self.active_bird.check_collision(obstacle): # ตรวจสอบการชนกัน
                 print("Game Over!")
